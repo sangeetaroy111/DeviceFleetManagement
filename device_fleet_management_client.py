@@ -15,6 +15,7 @@ while True:
         3. GetDeviceInfo
         4. InitiateDeviceActionRequest
         5. GetDeviceAction
+        Please select any other number to exit
         """)
         choice=int(input('please enter your choice (1-5): '))
         match choice:
@@ -71,15 +72,11 @@ while True:
                 data_request = devicefleetmanagement_pb2.GetDeviceAction (action_id=a_id)
                 data_reply = stub.GetDeviceAction (data_request)
                 print(f"State: {data_reply.action_status} ")
-            
-   
-
-
-
-
-    except:
-        print('error')
-        continue
+            case _:
+                break
+            except:
+                print('error')
+                continue
 
 if __name__ == '__main__':
     run_client()
