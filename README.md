@@ -2,8 +2,12 @@ Deliverables:
 1.	GitHub Link
 2.	README.md
   i.	Instruction to run both C++ backend service and Python CLI app on Linux
+        a. run below binary created after compiling device_fleet_managemet_server.cc, to start the server.
+          ./device_fleet_managemet_server
+        b. run below command to start python CLI
+          python device_fleet_managemet_client.py
   ii.	.proto service definition file
-            protoc --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` --cpp_out=. devicefleetmanagement.proto
+            protoc --grpc_out=. --cpp_out=. device_fleet_management.proto
   iii.	Architecture overview on how backend and CLI interact
   iv.	Detailed example on how to use CLI to interact with the services for all API function
   v.	Assumptions/simplifications/improvements
