@@ -9,5 +9,8 @@ Deliverables:
   ii.	.proto service definition file
             protoc --grpc_out=. --cpp_out=. device_fleet_management.proto
   iii.	Architecture overview on how backend and CLI interact
+      
   iv.	Detailed example on how to use CLI to interact with the services for all API function
+
   v.	Assumptions/simplifications/improvements
+  
