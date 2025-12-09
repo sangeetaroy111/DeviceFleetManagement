@@ -5,7 +5,7 @@ Deliverables:
         a. run below binary created after compiling device_fleet_managemet_server.cc, to start the server.
           ./device_fleet_managemet_server
         b. run below command to start python CLI
-          python device_fleet_managemet_client.py
+          ./device_fleet_managemet_client.py
   ii.	.proto service definition file
             protoc --grpc_out=. --cpp_out=. device_fleet_management.proto
   iii.	Architecture overview on how backend and CLI interact

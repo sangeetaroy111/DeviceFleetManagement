@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 import grpc
 import devicefleetmanagement_pb2
 import devicefleetmanagement_pb2_grpc
