@@ -42,7 +42,6 @@ class Action{
 	    _action_status=RUNNING;
 	    }
     int get_action_id(){
-        cout<<"Action::get_action_id "<<_action_id<<endl;
 	    return _action_id;
 	    }
     int get_action_status(){
@@ -110,11 +109,8 @@ class DevicePool{
 	    return ac.get_action_id();
 	    }
     int GetDeviceAction (int device_id, int action_id){
-	    cout<<"test0"<<endl;
       Device* app=_pool.find(device_id)->second;
-	    cout<<"test1"<<endl;
       int a_id=app->get_action(action_id).get_action_status();
-	    cout<<"test "<<a_id<<endl;
       return a_id;
 	    }
 };
