@@ -1,7 +1,13 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <mutex>
+#include <thread>
+#include <future>
+
 using namespace std;
+
+std::mutex mtx;
 
 enum State{
     IDLE,
@@ -18,7 +24,7 @@ enum ActionType{
 
 enum ActionStatus{
    PENDING,
-   RUNING,
+   RUNNING,
    COMPLETED,
    FAILED
   };
@@ -33,9 +39,10 @@ class Action{
     Action(){}
     Action(int action_type, string action_param):_action_type(static_cast<ActionType>(action_type)),_action_param(action_param){
 	    _action_id=_id_gen++;
-	    _action_status=RUNING;
+	    _action_status=RUNNING;
 	    }
     int get_action_id(){
+        cout<<"Action::get_action_id "<<_action_id<<endl;
 	    return _action_id;
 	    }
     int get_action_status(){
@@ -47,44 +54,34 @@ int Action::_id_gen=1;
 class Device{
   string _device_info;
   State _device_state;
-  Action _action;
+  map<int, Action> _actions;
   public:
-    Device(int st):_device_state(static_cast<State>(st)){}
-    void set_state(int st){
-	_device_state=static_cast<State>(st);
-	}
-    int set_action(Action ac){
-	_action=ac;
-	return ac.get_action_id();
-	}
-   Action get_action(){
-	return _action;
-	}
-   int get_state(){
-	return _device_state;
-	}
+  Device(int st):_device_state(static_cast<State>(st)){}
+  void set_state(int st){
+  _device_state=static_cast<State>(st);
+  }
+  void set_action(Action& ac){
+    _actions[ ac.get_action_id()]=ac;
+  }
+  Action get_action(int id){
+    return _actions.find(id)->second;
+  }
+  int get_state(){
+  return _device_state;
+  }
   string get_info(){
-	return _device_info;
-	}
+  return _device_info;
+  }
 };
 
 class DevicePool{
     map<int, Device*> _pool;
-    map<int, Action> _actions;
     static DevicePool* _self;
     
     DevicePool(){}
     DevicePool(const DevicePool&)=delete;
     DevicePool& operator=(const DevicePool&)=delete;
     
-    int add_action(Action ac){
-    _actions[ ac.get_action_id()]=ac;
-    return ac.get_action_id();
-    }
-    Action get_action(int id){
-    return _actions.find(id)->second;
-    }
-
     public:
     static DevicePool* getInstance(){
 	    if(_self==nullptr)
@@ -102,15 +99,27 @@ class DevicePool{
     Device *GetDevice(int device_id){
 	    return _pool.find(device_id)->second;
 	    }
-    int InitiateDeviceAction (int device_id, int action_type, string action_param){
+    int Initiate(int device_id, int action_type, string action_param){
+	    std::lock_guard<std::mutex> lock(mtx);
 	    Device* app=_pool.find(device_id)->second;
+	    app->set_state(UPDATING);
+	    std::this_thread::sleep_for(std::chrono::seconds(3));
 	    Action ac( action_type, action_param);
-	    add_action(ac);
-	    return app->set_action(ac);
+	    app->set_action(ac);
+	    app->set_state(IDLE);
+	    return ac.get_action_id();
 	    }
-    int GetDeviceAction (int action_id){
-	    return _actions.find(action_id)->second.get_action_status();
+    int GetDeviceAction (int device_id, int action_id){
+	    cout<<"test0"<<endl;
+      Device* app=_pool.find(device_id)->second;
+	    cout<<"test1"<<endl;
+      int a_id=app->get_action(action_id).get_action_status();
+	    cout<<"test "<<a_id<<endl;
+      return a_id;
 	    }
 };
 
 DevicePool* DevicePool::_self=nullptr;
+
+
+

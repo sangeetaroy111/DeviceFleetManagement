@@ -17,3 +17,4 @@ Deliverables:
       a. Exception handler need to be added, also need to add checks for negative scenarios.
       b. GetDeviceAction API call is currently based only on Action ID, Device ID can be added for better design amd maintenance.
       c. Client CLI can be more user friendly with infinite loop for different API call by users. 
+      d. Assuming device ID as 1st param for GetDeviceAction API. 

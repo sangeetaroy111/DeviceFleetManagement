@@ -68,8 +68,9 @@ while True:
                 print(f"State: {data_reply.state} info: {data_reply.action_id} ")
              case 5:
                 # Call GetDeviceAction 
+                d_id=int(input('please enter any Device ID: '))
                 a_id=int(input('please enter any Action ID: '))
-                data_request = devicefleetmanagement_pb2.GetDeviceAction (action_id=a_id)
+                data_request = devicefleetmanagement_pb2.GetDeviceAction (device_id=d_id, action_id=a_id)
                 data_reply = stub.GetDeviceAction (data_request)
                 print(f"State: {data_reply.action_status} ")
             case _:
